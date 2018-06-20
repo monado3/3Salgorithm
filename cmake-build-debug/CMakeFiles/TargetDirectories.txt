@@ -1,3 +1,0 @@
-/home/monado/CLionProjects/3Salgorithm/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/monado/CLionProjects/3Salgorithm/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/monado/CLionProjects/3Salgorithm/cmake-build-debug/CMakeFiles/3Salgorithm.dir
