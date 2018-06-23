@@ -49,10 +49,9 @@ int main() {
 unsigned int read_pi(unsigned char *arr) {
     char readline[N_ROW + 2];
     unsigned int num = 0;
-    int i;
 
     while (fgets(readline, N_ROW + 2, stdin) != NULL) {
-        for (i = 0; i < N_ROW; i++) {
+        for (unsigned int i = 0; i < N_ROW; ++i) {
             arr[num + i] = (unsigned char) (readline[i] - '0');
         }
         num += N_ROW;
@@ -103,7 +102,7 @@ unsigned int search(unsigned char *pi_arr, unsigned int n_size_pi, unsigned char
     }
 
     unsigned int accumu_cnt = 0;
-    for (char j = -1; j < 10; j++) {
+    for (char j = -1; j < 10; ++j) {
         accumu_cnt += cnt_arr[j];
         if (accumu_cnt >= n_remain) {
             if (j == -1) {
@@ -123,6 +122,6 @@ unsigned int search(unsigned char *pi_arr, unsigned int n_size_pi, unsigned char
 
 void output_result(unsigned int *ans_idx_arr) {
     for (int i = 0; i < SEARCHIDX - 1; ++i) {
-        printf("the %d idx: %d\n", i + 1, ans_idx_arr[i] + 1);
+        printf("the %d index: %9d\n", i + 1, ans_idx_arr[i] + 1);
     }
 }
