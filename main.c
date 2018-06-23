@@ -11,16 +11,14 @@ void make_matrix(unsigned int ***mat, unsigned int **base__mat, unsigned int n);
 
 void arr_copy(unsigned int *to_arr, const unsigned int *from_arr, unsigned int n);
 
-unsigned int search(unsigned char *pi_arr, unsigned int n_size_pi, unsigned char *part_goal_str, unsigned int size_pgs,
-                    unsigned int n_remain, unsigned int *search_idx_arr, unsigned int n_search_idxs,
-                    unsigned int **search_idx_mat);
+unsigned int search(unsigned char *pi_arr, unsigned int n_size_pi, unsigned int len_foundstr, unsigned int n_remain,
+                    unsigned int *search_idx_arr, unsigned int n_search_idxs, unsigned int **search_idx_mat);
 
 void output_result(unsigned int *ans_idx_arr);
 
 int main() {
     unsigned char *pi_arr = malloc(sizeof(char) * MAXLEN); // this is 1Bite integer array
-    unsigned char *part_goal_str = malloc(sizeof(char) * MAXLEN); // this is 1Bite integer array
-    unsigned int n_size_pi, goal_idx, size_pgs;
+    unsigned int n_size_pi, goal_idx;
     unsigned int ans_idx_arr[SEARCHIDX - 1];
     unsigned int **search_idx_mat;
     unsigned int *base_search_idx_mat;
@@ -32,9 +30,7 @@ int main() {
     make_matrix(&search_idx_mat, &base_search_idx_mat, n_size_pi);
     for (int i = 1; i < SEARCHIDX; ++i) {
         goal_idx = (n_size_pi / SEARCHIDX) * i;
-        size_pgs = 0;
-        ans_idx_arr[i - 1] = search(pi_arr, n_size_pi, part_goal_str, size_pgs, goal_idx, search_idx_arr, 0,
-                                    search_idx_mat);
+        ans_idx_arr[i - 1] = search(pi_arr, n_size_pi, 0, goal_idx, search_idx_arr, 0, search_idx_mat);
     }
     output_result(ans_idx_arr);
 
@@ -42,7 +38,6 @@ int main() {
     free(base_search_idx_mat);
     free(search_idx_mat);
     free(pi_arr);
-    free(part_goal_str);
     return 0;
 }
 
@@ -75,14 +70,13 @@ void arr_copy(unsigned int *to_arr, const unsigned int *from_arr, unsigned int n
 }
 
 
-unsigned int search(unsigned char *pi_arr, unsigned int n_size_pi, unsigned char *part_goal_str, unsigned int size_pgs,
-                    unsigned int n_remain, unsigned int *search_idx_arr, unsigned int n_search_idxs,
-                    unsigned int **search_idx_mat) {
+unsigned int search(unsigned char *pi_arr, unsigned int n_size_pi, unsigned int len_foundstr, unsigned int n_remain,
+                    unsigned int *search_idx_arr, unsigned int n_search_idxs, unsigned int **search_idx_mat) {
     unsigned int i, idx;
     unsigned int _cnt_arr[11] = {0};
     unsigned int *cnt_arr = &(_cnt_arr[1]);
     unsigned char number;
-    if (size_pgs == 0) {
+    if (len_foundstr == 0) {
         cnt_arr[-1] = 0;
         for (i = 0; i < n_size_pi; ++i) {
             number = pi_arr[i];
@@ -91,7 +85,7 @@ unsigned int search(unsigned char *pi_arr, unsigned int n_size_pi, unsigned char
         }
     } else {
         for (i = 0; i < n_search_idxs; ++i) {
-            if ((idx = search_idx_arr[i] + size_pgs) == n_size_pi) {
+            if ((idx = search_idx_arr[i] + len_foundstr) == n_size_pi) {
                 cnt_arr[-1]++;
             } else {
                 number = pi_arr[idx];
@@ -106,15 +100,14 @@ unsigned int search(unsigned char *pi_arr, unsigned int n_size_pi, unsigned char
         accumu_cnt += cnt_arr[j];
         if (accumu_cnt >= n_remain) {
             if (j == -1) {
-                return n_size_pi - size_pgs;
+                return n_size_pi - len_foundstr;
             } else if (cnt_arr[j] == 1) {
                 return search_idx_mat[j][0];
             } else {
-                part_goal_str[size_pgs] = (unsigned char) j;
-                size_pgs++;
+                len_foundstr++;
                 arr_copy(search_idx_arr, search_idx_mat[j], cnt_arr[j]);
-                return search(pi_arr, n_size_pi, part_goal_str, size_pgs, n_remain - accumu_cnt + cnt_arr[j],
-                              search_idx_arr, cnt_arr[j], search_idx_mat);
+                return search(pi_arr, n_size_pi, len_foundstr, n_remain - accumu_cnt + cnt_arr[j], search_idx_arr,
+                              cnt_arr[j], search_idx_mat);
             }
         }
     }
