@@ -7,7 +7,7 @@
 
 unsigned int read_pi(unsigned char *arr);
 
-void make_matrix(unsigned int ***mat, unsigned int **base__mat, unsigned int n);
+void make_matrix(unsigned int ***mat, unsigned int **base_mat, unsigned int n);
 
 void arr_copy(unsigned int *to_arr, const unsigned int *from_arr, unsigned int n);
 
@@ -54,12 +54,12 @@ unsigned int read_pi(unsigned char *arr) {
     return num;
 }
 
-void make_matrix(unsigned int ***mat, unsigned int **base__mat, unsigned int n) {
+void make_matrix(unsigned int ***mat, unsigned int **base_mat, unsigned int n) {
     n /= 5;
-    *mat = (unsigned int **) malloc(sizeof(unsigned int *) * 10);
-    *base__mat = (unsigned int *) malloc(sizeof(unsigned int) * 10 * n);
+    *mat = malloc(sizeof(unsigned int *) * 10);
+    *base_mat = malloc(sizeof(unsigned int) * 10 * n);
     for (int i = 0; i < 10; ++i) {
-        (*mat)[i] = *base__mat + i * n;
+        (*mat)[i] = *base_mat + i * n;
     }
 }
 
@@ -76,6 +76,7 @@ unsigned int search(unsigned char *pi_arr, unsigned int n_size_pi, unsigned int 
     unsigned int _cnt_arr[11] = {0};
     unsigned int *cnt_arr = &(_cnt_arr[1]);
     unsigned char number;
+    
     if (len_foundstr == 0) {
         cnt_arr[-1] = 0;
         for (i = 0; i < n_size_pi; ++i) {
