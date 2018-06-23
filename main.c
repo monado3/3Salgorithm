@@ -5,13 +5,11 @@
 #define N_ROW 20
 #define SEARCHIDX 5
 
-
 unsigned int read_pi(unsigned char *arr);
 
 void make_matrix(unsigned int ***mat, unsigned int **base__mat, unsigned int n);
 
 void arr_copy(unsigned int *to_arr, const unsigned int *from_arr, unsigned int n);
-
 
 unsigned int search(unsigned char *pi_arr, unsigned int n_size_pi, unsigned char *part_goal_str, unsigned int size_pgs,
                     unsigned int n_remain, unsigned int *search_idx_arr, unsigned int n_search_idxs,
@@ -32,11 +30,9 @@ int main() {
     n_size_pi = read_pi(pi_arr);
     search_idx_arr = malloc(sizeof(unsigned int) * (n_size_pi / 5));
     make_matrix(&search_idx_mat, &base_search_idx_mat, n_size_pi);
-//    first_count(pi_arr, n_size_pi, search_idx_mat, search_idx_arr); // search_idx_arr is alternative for cnt_arr
     for (int i = 1; i < SEARCHIDX; ++i) {
         goal_idx = (n_size_pi / SEARCHIDX) * i;
         size_pgs = 0;
-//        copy_init();
         ans_idx_arr[i - 1] = search(pi_arr, n_size_pi, part_goal_str, size_pgs, goal_idx, search_idx_arr, 0,
                                     search_idx_mat);
     }
@@ -51,20 +47,11 @@ int main() {
 }
 
 unsigned int read_pi(unsigned char *arr) {
-    char readline[N_ROW + 1];
+    char readline[N_ROW + 2];
     unsigned int num = 0;
     int i;
 
-    //for debug
-    FILE *fp;
-    if ((fp = fopen("./pi_data/pi200M.txt", "r")) == NULL) {
-        fprintf(stderr, "オープンに失敗しました.\n");
-        return 1;
-    }
-    //
-
-//    while (fgets(readline, N_ROW + 2, stdin) != NULL) {
-    while (fgets(readline, N_ROW + 2, fp) != NULL) {
+    while (fgets(readline, N_ROW + 2, stdin) != NULL) {
         for (i = 0; i < N_ROW; i++) {
             arr[num + i] = (unsigned char) (readline[i] - '0');
         }
@@ -95,7 +82,7 @@ unsigned int search(unsigned char *pi_arr, unsigned int n_size_pi, unsigned char
     unsigned int i, idx;
     unsigned int _cnt_arr[11] = {0};
     unsigned int *cnt_arr = &(_cnt_arr[1]);
-    int number;
+    unsigned char number;
     if (size_pgs == 0) {
         cnt_arr[-1] = 0;
         for (i = 0; i < n_size_pi; ++i) {
