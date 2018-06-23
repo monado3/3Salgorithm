@@ -1,17 +1,16 @@
 #include <stdio.h>
 #include <malloc.h>
 
-#define MAXLEN 20000000
+#define MAXLEN 200000000
 #define N_ROW 20
 #define SEARCHIDX 5
 
 
 unsigned int read_pi(unsigned char *arr);
 
-//void make_matrix(unsigned int **mat, unsigned int *base__mat, unsigned int n);
 void make_matrix(unsigned int ***mat, unsigned int **base__mat, unsigned int n);
 
-void arrcpy(unsigned int *to_arr, unsigned int *from_arr, unsigned int n);
+void arr_copy(unsigned int *to_arr, const unsigned int *from_arr, unsigned int n);
 
 
 unsigned int search(unsigned char *pi_arr, unsigned int n_size_pi, unsigned char *part_goal_str, unsigned int size_pgs,
@@ -33,7 +32,6 @@ int main() {
     n_size_pi = read_pi(pi_arr);
     search_idx_arr = malloc(sizeof(unsigned int) * (n_size_pi / 5));
     make_matrix(&search_idx_mat, &base_search_idx_mat, n_size_pi);
-//    make_matrix(search_idx_mat, base_search_idx_mat, n_size_pi);
 //    first_count(pi_arr, n_size_pi, search_idx_mat, search_idx_arr); // search_idx_arr is alternative for cnt_arr
     for (int i = 1; i < SEARCHIDX; ++i) {
         goal_idx = (n_size_pi / SEARCHIDX) * i;
@@ -59,14 +57,13 @@ unsigned int read_pi(unsigned char *arr) {
 
     //for debug
     FILE *fp;
-    if ((fp = fopen("./pi_data/pi20M.txt", "r")) == NULL) {
-//    if ((fp = fopen("./pi_data/test.txt", "r")) == NULL) {
+    if ((fp = fopen("./pi_data/pi200M.txt", "r")) == NULL) {
         fprintf(stderr, "オープンに失敗しました.\n");
         return 1;
     }
     //
 
-//    while (fgets(readline, N_ROW + 1, stdin) != NULL) {
+//    while (fgets(readline, N_ROW + 2, stdin) != NULL) {
     while (fgets(readline, N_ROW + 2, fp) != NULL) {
         for (i = 0; i < N_ROW; i++) {
             arr[num + i] = (unsigned char) (readline[i] - '0');
@@ -84,15 +81,8 @@ void make_matrix(unsigned int ***mat, unsigned int **base__mat, unsigned int n) 
         (*mat)[i] = *base__mat + i * n;
     }
 }
-//void make_matrix(unsigned int **mat, unsigned int *base__mat, unsigned int n) {
-//    mat = malloc(sizeof(unsigned int *) * 10);
-//    base__mat = malloc(sizeof(unsigned int) * n);
-//    for (int i = 0; i < 10; ++i) {
-//        mat[i] = base__mat + i * n;
-//    }
-//}
 
-void arrcpy(unsigned int *to_arr, unsigned int *from_arr, unsigned int n) {
+void arr_copy(unsigned int *to_arr, const unsigned int *from_arr, unsigned int n) {
     for (unsigned int idx = 0; idx < n; ++idx) {
         to_arr[idx] = from_arr[idx];
     }
@@ -136,10 +126,9 @@ unsigned int search(unsigned char *pi_arr, unsigned int n_size_pi, unsigned char
             } else {
                 part_goal_str[size_pgs] = (unsigned char) j;
                 size_pgs++;
-                arrcpy(search_idx_arr, search_idx_mat[j], cnt_arr[j]);
+                arr_copy(search_idx_arr, search_idx_mat[j], cnt_arr[j]);
                 return search(pi_arr, n_size_pi, part_goal_str, size_pgs, n_remain - accumu_cnt + cnt_arr[j],
                               search_idx_arr, cnt_arr[j], search_idx_mat);
-//                break;
             }
         }
     }
@@ -150,4 +139,3 @@ void output_result(unsigned int *ans_idx_arr) {
         printf("the %d idx: %d\n", i + 1, ans_idx_arr[i] + 1);
     }
 }
-
