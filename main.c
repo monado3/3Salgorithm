@@ -76,7 +76,7 @@ unsigned int search(unsigned char *pi_arr, unsigned int n_size_pi, unsigned int 
     unsigned int _cnt_arr[11] = {0};
     unsigned int *cnt_arr = &(_cnt_arr[1]);
     unsigned char number;
-    
+
     if (len_foundstr == 0) {
         cnt_arr[-1] = 0;
         for (i = 0; i < n_size_pi; ++i) {
